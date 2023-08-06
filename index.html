@@ -1,1 +1,40 @@
-Hello World
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CS 416 Project</title>
+  <h1>Cars and their owner's average income</h1>
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
+  <style>
+    .rect:hover { opacity: 0.5; }
+  </style>
+</head>
+<body>
+    <div id="d3-container">
+  </div>
+  
+  <p style = "font-size: 20px"> 
+    The chart presents the average price from 5 different states that the dealership sold from in the used car data set
+    <br>
+    <br>
+    The annotations that display the average price of each car makes for each car at different states in the US.
+    <br> 
+    <br>
+    It can be infered that there is a 
+    <br>
+    <br>
+    More trends are displayed by clicking through the button located at the bottom 
+    <br>
+    <br>
+    The above dataset and data used throughout this visualization was taken from the used car sales and was put onto a dataset on Kaggle. 
+    The link to the original dataset can be found below.
+    <br>
+    <a href = "https://www.kaggle.com/datasets/sachinsachin/car-sales?select=Car+Sales.xlsx"> Car Sales Data </a>
+    </p>
+
+  <script type="text/javascript" src="bar_graph.js"> </script>
+  <a href = "site2.html">
+    <button id ="site2">Next Slide</button>
+</a>
+</body>
+</html>

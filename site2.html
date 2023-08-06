@@ -2,14 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <script src = "https://d3js.org/d3.v5.min.js"></script>
     <title>CS 416 Project</title>
     <h1>Further Anaylsis of Trends</h1>
     
 </head>
 <script src = "https://d3js.org/d3.v5.min.js"></script>
-<style> circle {fill: red; stroke: red;}
-
+<style>
         #slide1 {
                 display:block;
                 margin:auto;
@@ -25,29 +23,17 @@
     <svg width=700 height=700>
     </svg>
 
-    <p> 
-        The above graph displays two variables that measure a country's standards of living.
-        <br>
-        <br>
-        It is imporant to see the correlation between the two variables but also keep in mind that correlation doesn't imply causation.
-        <br>
-        <br>
-        Click the Scene 3 button below to get to the next scene, or the Scene 1 buton to get to the previous scene.
-    </p>
-
     <script>
         async function init() { 
+            const data = await d3.csv('https://raw.githubusercontent.com/vp1620/vp16.github.io/main/data/USA_cars_datasets.csv');
+            console.log(data)
 
-            const title = "Price of Vehicle vs Mileage";
-            const yname = "Price of Vehicle";
-            const xname = "Mileage";
-            
-            d3.csv('https://github.com/vp1620/vp16.github.io/blob/main/data/USA_cars_datasets.csv').then(function(data) { ///Users/vishveshpadmakumar/Documents/GitHub/vp16.github.io/data/USA_cars_datasets.csv
+            const title = "Price vs Mileage";
+            const yaxisname = "Price";
+            const xaxisname = "Mileage";
 
-            
-
-            const x = d3.scaleLinear().domain([0,90000]).range([0,600]);
-            const y = d3.scaleLinear().domain([0,400000]).range([600,0]);
+            var x = d3.scaleLinear().domain([-20,400000]).range([0,600]);
+            var y = d3.scaleLinear().domain([-20,90000]).range([600,0]);
 
             d3.select("svg")
             .append("g")
@@ -56,50 +42,73 @@
             .data(data)
             .enter()
             .append("circle")
-            .attr("cx", function(d) { return x(d.mileage);})
-            .attr("r", 3)
-            .transition()
-            .duration(3000)
-            .attr("cy", function(d) { return y(d.price);})
-            .transition().
-            duration(3000)})
+            .attr("cx", function(d,i) { return x(d.mileage);})
+            .attr("cy", function(d,i) { return 350;})
+            .attr("r", 1.5)
+            .transition().duration(3000)
+            .attr("cy", function(d,i) { return y(d.price);})
+            .style("fill", "#F01D08");
 
-            // d3.select('svg')
-            // .append("g")
-            // .attr("transform","translate("+50+","+50+")")
-            // .call(d3.axisLeft(y))
-            // .append('text')
-            // .attr('class', 'axis-label')
-            // .attr('y', -35)
-            // .attr('x', -200)
-            // .attr('transform', 'rotate(-90)')
-            // .attr('fill', 'black')
-            // .style("font-size","18px")
-            // .text(yname);
+            d3.select('svg')
+            .append("g")
+            .attr("transform","translate("+50+","+50+")")
+            .call(d3.axisLeft(y))
+            .append('text')
+            .attr('class', 'axis-label')
+            .attr('y', -35)
+            .attr('x', -200)
+            .attr('transform', 'rotate(-90)')
+            .attr('fill', 'black')
+            .style("font-size","18px")
+            .text(yaxisname);
 
-            // d3.select('svg')
-            // .append("g")
-            // .attr("transform","translate("+50+","+(600+50)+")")
-            // .call(d3.axisBottom(x).ticks(20))
-            // .append('text')
-            // .attr('class', 'axis-label')
-            // .attr('y', 40)
-            // .attr('x', 300)
-            // .attr('fill', 'black')
-            // .style("font-size","18px")
-            // .text(xname);
+            d3.select('svg')
+            .append("g")
+            .attr("transform","translate("+50+","+(600+50)+")")
+            .call(d3.axisBottom(x).ticks(10))
+            .append('text')
+            .attr('class', 'axis-label')
+            .attr('y', 40)
+            .attr('x', 300)
+            .attr('fill', 'black')
+            .style("font-size","18px")
+            .text(xaxisname);
 
-            // d3.select('svg')
-            // .append('g')
-            // .attr("transform","translate("+168+","+50+")")
-            // .append('text')
-            // .attr('class', 'title')
-            // .attr('y', -10)
-            // .style("font-size","20px")
-            // .text(title);
+            d3.select('svg')
+            .append('g')
+            .attr("transform","translate("+168+","+50+")")
+            .append('text')
+            .attr('class', 'title')
+            .attr('y', -10)
+            .style("font-size","20px")
+            .text(title);
+            
+            var svg = d3.select("#dataviz_basicZoom")
+            .append("svg")
+            .attr("width",  460)
+            .attr("height",  460)
+            .call(d3.zoom().on("zoom", function () {
+            svg.attr("transform", d3.event.transform)
+            })).append("g")
         }
 
     </script> 
+
+    <p style = "font-size: 20px"> 
+        The above graph displays two variables being mileage and price to see the correlation between them.
+        <br>
+        <br>
+        Although the relationship seems to be inverse, there are a lot of factors to account for when looking at the decrease
+        It is common knowledge to know that lower miles means higher price but brands and even state comes into play when pricing is being 
+        determined, as we'll see in the next site.
+        <br>
+        <br>
+        It is imporant to see the correlation between the two variables for later purposes on what locations have more expensive cars
+        <br>
+        <br>
+    </p>
+
+
     <a href = "index.html">
         <button id ="slide1">Slide 1</button>
     </a>

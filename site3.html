@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CS 416 Project</title>
+    <h1>Now Lets Display Each Car from the dataset </h1>
+    
+</head>
+<script src = "https://d3js.org/d3.v5.min.js"></script>
+<style>
+        #tooltip {
+            opacity: 0;
+            position: absolute;
+            text-align: center;
+            width: 150px; height: 145px;
+            background: white;
+            border: 0px;
+        }
+        #start {
+            display:block;
+            margin:auto;
+            width: 100px; height: 40px;
+        }
+</style>
+
+<body onload='init()'>
+    <div id = "tooltip"></div>
+    <div id = "svg_area"></div>
+
+    <script>
+        async function init() { 
+            const data = await d3.csv('https://raw.githubusercontent.com/vp1620/vp16.github.io/main/data/USA_cars_datasets.csv');
+            console.log(data)
+
+            const title = "Price Mileage and State Correlation";
+            const yaxisname = "Price";
+            const xaxisname = "Mileage";
+
+            var x = d3.scaleLinear().domain([-20,400000]).range([0,600]);
+            var y = d3.scaleLinear().domain([-20,90000]).range([600,0]);
+
+            var tooltip = d3.select("#tooltip");
+
+            var svg = d3.select("#svg_area")
+            .append("svg")
+            .attr("width", 1400)
+            .attr("height", 700)
+            .call(d3.zoom().scaleExtent([1, 8]).on("zoom", function () {
+                svg.attr("transform", d3.event.transform)
+
+            }))
+            .append("g")
+
+            svg.append("g").attr("transform","translate("+50+","+50+")")
+            .call(d3.axisLeft(y))
+            .append('text')
+            .attr('class', 'axis-label')
+            .attr('y', -50)
+            .attr('x', -250)
+            .attr('transform', 'rotate(-90)')
+            .attr('fill', 'black')
+            .style("font-size","18px")
+            .text(yaxisname);
+
+            svg.append("g").attr("transform","translate("+50+","+(600+50)+")")
+            .call(d3.axisBottom(x).ticks(10))
+            .append('text')
+            .attr('class', 'axis-label')
+            .attr('y', 40)
+            .attr('x', 330)
+            .attr('fill', 'black')
+            .style("font-size","18px")
+            .text(xaxisname);
+
+            svg.append('g')
+            .attr("transform","translate("+580+","+50+")")
+            .append('text')
+            .attr('class', 'title')
+            .attr('y', -10)
+            .style("font-size","30px")
+            .text(title);
+
+    
+            svg.append("g").attr("transform","translate("+50+","+50+")")
+            .selectAll("circle")
+            .data(data)
+            .enter()
+            .append("circle")
+            .attr("cx", function(d,i) { return x(d.mileage);})
+            .attr("cy", function(d,i) {return y(d.price);})
+            .attr("r", 2)
+            .style("fill", function(d,i) {if (d.state == "california") {return "#FF1B00";}
+                                            else if (d.state == "texas") {return "#FFD500";}
+                                            else if (d.state == "new york") {return "#61FF00";}
+                                            else if (d.state == "florida") {return "#00FBFF";}
+                                            else if (d.state == "illinois") {return "#FF00FF";}
+                                            else {return "#6C6F84";}})
+            .on("mouseover", function(d,i) {
+                tooltip.style("opacity", 1)
+                        .style("left",(d3.event.pageX)+"px")
+                        .style("top",(d3.event.pageY)+"px")
+                        .style("pointer-events", "none")
+                        .html("Year: "+d.year+ '<br>'+"Make: "+d.brand+ '<br>'+"Model: "+d.model+'<br>'+"Mileage: "+d.mileage+ '<br>'+ "Price: " +d.price+ '<br>'+ 'State: ' +d.state);
+            })
+            .on("mouseout", function() { tooltip.style("opacity", 0) });
+        }
+        
+    </script> 
+
+    <p style = "font-size: 20px">
+        On the graph above, you can see all the variables that present the basic requirements when buying a car.
+        <br>
+        <br>
+        Feel free to zoom in and out and examine the differences and trends between the price mileage, and states.
+        Furthermore, the states from the first slide have been color coded to present the states and their locations on the graph
+        <br>
+        <br>
+        Cali being red, Texas being yellow, New York being green, Florida being light blue, Illinois being pink, and 
+        the rest being grey
+        <br>
+        <br>
+        Moreover, you can hover over each point to see more info on each vehicle.
+        <br>
+    </p>
+
+    <a href = "index.html">
+        <button id="start">Back to Start</button>
+    </a>
+
+</body>
+</html>
